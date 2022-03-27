@@ -1,13 +1,11 @@
 package gb.safronov.client.controllers;
 
 import gb.safronov.client.models.Network;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
@@ -43,12 +41,38 @@ public class ChatController {
     @FXML
     private GridPane startLoginWindow2;
 
+    private String selectedRecipient;
+
     @FXML
     public void initialize() {
         usersList.setItems(FXCollections.observableArrayList("Тимофей", "Дмитрий", "Диана", "Арман"));
         loginButton.setOnAction(actionEvent -> sendLoginMessage());
         sendButton.setOnAction(event -> sendMessage());
         inputField.setOnAction(event -> sendMessage());
+
+        usersList.setCellFactory(lv -> {
+            MultipleSelectionModel<String> selectionModel = usersList.getSelectionModel();
+            ListCell<String> cell = new ListCell<>();
+            cell.textProperty().bind(cell.itemProperty());
+            cell.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+                usersList.requestFocus();
+                if (!cell.isEmpty()) {
+                    int index = cell.getIndex();
+                    if (selectionModel.getSelectedIndices().contains(index)) {
+                        selectionModel.clearSelection(index);
+                        selectedRecipient = null;
+                    } else {
+                        selectionModel.select(index);
+                        selectedRecipient = cell.getItem();
+                    }
+                    event.consume();
+                }
+            });
+            return cell;
+        });
+
+
+
     }
 
     private void sendLoginMessage() {
@@ -67,9 +91,6 @@ public class ChatController {
 
     }
 
-
-
-
     private Network network;
 
     public void setNetwork(Network network) {
@@ -79,6 +100,7 @@ public class ChatController {
     private void sendMessage() {
         String message = inputField.getText().trim();
         inputField.clear();
+
 
         if (message.trim().isEmpty()) {
             return;
@@ -101,8 +123,36 @@ public class ChatController {
         chatHistory.appendText("You are online!");
         chatHistory.appendText(System.lineSeparator());
 
-    }
 
+    }
+     public void setUsernameTitle (String name) {
+         this.usernameTitle.setText(name);
+
+    }
+    public void appendServerMessage(String serverMessage) {
+        chatHistory.appendText(serverMessage);
+        chatHistory.appendText(System.lineSeparator());
+
+    }
+public void setUserlist(String a) {
+String[] s;
+
+      s = a.split("\\s+", 2);
+      s[1] = s[1].replaceAll("[,.]", "");
+    s[1] = s[1].replaceAll("]", "");
+    s[1] = s[1].replaceAll("\\[", "");
+
+
+    System.out.println(s[1]);
+
+
+    usersList.setItems(null);
+    String[] splited = s[1].split("\\s+");
+    usersList.setItems(FXCollections.observableArrayList(splited));
+
+
+
+}
 
 
 }
