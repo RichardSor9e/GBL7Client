@@ -30,6 +30,10 @@ public class ChatController {
     private Button loginButton;
 
     @FXML
+    private Button RegistrationButton;
+
+
+    @FXML
     private TextField loginTextField;
 
     @FXML
@@ -47,6 +51,7 @@ public class ChatController {
     public void initialize() {
         usersList.setItems(FXCollections.observableArrayList("Тимофей", "Дмитрий", "Диана", "Арман"));
         loginButton.setOnAction(actionEvent -> sendLoginMessage());
+//        RegistrationButton.setOnAction(actionEvent -> sendLoginMessage());
         sendButton.setOnAction(event -> sendMessage());
         inputField.setOnAction(event -> sendMessage());
 

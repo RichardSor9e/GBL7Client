@@ -119,7 +119,7 @@
             </TextField>
             <StackPane prefHeight="150.0" prefWidth="200.0" rotate="15.3" GridPane.rowIndex="4">
                <children>
-                  <Button fx:id="loginButton" mnemonicParsing="false" text="Jump in">
+                  <Button fx:id="loginButton" mnemonicParsing="false" style="-fx-background-color: #00008B;" text="Jump in">
                      <effect>
                         <DropShadow blurType="TWO_PASS_BOX" height="31.26" radius="16.962500000000002" spread="0.15" width="38.59" />
                      </effect>
@@ -138,6 +138,8 @@
                   </Text>
                </children>
             </StackPane>
+            <SplitPane opacity="0.0" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5" />
+            <Button fx:id="RegistrationButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="118.0" style="-fx-background-color: #00008B;" text="Registration" GridPane.rowIndex="5" />
          </children>
       </GridPane>
     </children>
