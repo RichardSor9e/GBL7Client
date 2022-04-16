@@ -9,7 +9,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
+
 public class ChatController {
+
 
     @FXML
     private ListView<String> usersList;
@@ -131,6 +134,7 @@ public class ChatController {
 
     }
      public void setUsernameTitle (String name) {
+         System.out.println(name);
          this.usernameTitle.setText(name);
 
     }
@@ -140,20 +144,22 @@ public class ChatController {
 
     }
 public void setUserlist(String a) {
+
 String[] s;
 
-      s = a.split("\\s+", 2);
-      s[1] = s[1].replaceAll("[,.]", "");
-    s[1] = s[1].replaceAll("]", "");
-    s[1] = s[1].replaceAll("\\[", "");
+      s = a.split(", ");
+      s[0] = s[0].replace("/ref", "");
+
+    for (int i = 0; i < s.length; i++) {
+        s[i] = s[i].replace("[","");
+        s[i] = s[i].replace("]","");
+    }
 
 
-    System.out.println(s[1]);
+//    usersList.setItems(null);
+//    String[] splited = s[1].split("\\s+", 1);
 
-
-    usersList.setItems(null);
-    String[] splited = s[1].split("\\s+");
-    usersList.setItems(FXCollections.observableArrayList(splited));
+    usersList.setItems(FXCollections.observableArrayList(s));
 
 
 

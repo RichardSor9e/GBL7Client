@@ -3,10 +3,9 @@ package gb.safronov.client.models;
 import gb.safronov.client.controllers.ChatController;
 import javafx.application.Platform;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Network {
 
@@ -16,6 +15,7 @@ public class Network {
     private static final String CLIENT_MSG_CMD_PREFIX = "/cm"; // + msg
     private static final String SERVER_MSG_CMD_PREFIX = "/sm"; // + msg
     private static final String PRIVATE_MSG_CMD_PREFIX = "/pm"; // + msg
+    private static final String CHAT_HISTORY = "/ch"; // + msg
     private static final String STOP_SERVER_CMD_PREFIX = "/stop";
     private static final String END_CLIENT_CMD_PREFIX = "/end";
     private static final String REFRESH_CLIENT_LIST = "/ref";
@@ -24,6 +24,8 @@ public class Network {
     public static final int DEFAULT_PORT = 8186;
     private DataInputStream in;
     private DataOutputStream out;
+    private ArrayList<String> arrayList;
+    private ObjectInputStream inObject;
 
     private final String host;
     private final int port;
@@ -88,12 +90,18 @@ public class Network {
                        Platform.runLater(() -> chatController.appendServerMessage(serverMessage));
                    } else if (message.startsWith(REFRESH_CLIENT_LIST)){
 
-                       Platform.runLater(() -> chatController.setUserlist(message));
+                       String finalMessage = message;
+                       Platform.runLater(() -> chatController.setUserlist(finalMessage));
+                   } else if (message.startsWith(CHAT_HISTORY)) {
 
+                       message = message.replace("/ch", "");
+                       chatController.appendMessage( message);
+                   } else
+message = message.replace("/cMsg", "");
+                       chatController.appendMessage("Я: " + message);
 
                    }
-                   chatController.appendMessage("Я: " + message);
-               }
+
            } catch (IOException e) {
                e.printStackTrace();
            }
